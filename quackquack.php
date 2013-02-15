@@ -7,21 +7,13 @@ function get($url, $opts = array())
 	curl_close($c);
 	return $r;
 }
-$url = null;
+$url = empty($_POST['url']) ? null : $_POST['url'];
 $iscli = php_sapi_name() == 'cli';
 $newline = $iscli ? "\n" : '<br>';
 if($iscli)
 {
-	if($argc !== 2)
-	{
-		echo 'Usage: php ' . $argv[0] . ' <url>';
-		exit;
-	}
+	($argc === 2) || die('Usage: php ' . $argv[0] . ' <url>' . $newline);
 	$url = $argv[1];
-}
-if(!empty($_POST['url']))
-{
-	$url = $_POST['url'];
 }
 if($url)
 {
@@ -49,8 +41,7 @@ if($url)
 		$iscli || print '<!DOCTYPE html><html><head><title>QuackQuack Error</title></head><body>';
 		foreach($url[0] as $link)
 		{
-			$result = get($link, $opts);
-			if(!preg_match('#src="([&\#x0-9a-f;]+)"#', $result, $true))
+			if(!preg_match('#src="([&\#x0-9a-f;]+)"#', ($result = get($link, $opts)), $true))
 			{
 				echo $link . " skipped, could not decrypt." . $newline;
 				continue;
