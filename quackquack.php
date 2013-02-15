@@ -46,10 +46,7 @@ if($url)
 		{
 			throw new Exception('Links could not be detected, bad response.');
 		}
-		if(!$iscli)
-		{
-			echo '<!DOCTYPE html><html><head><title>QuackQuack Error</title></head><body>';
-		}
+		$iscli || print '<!DOCTYPE html><html><head><title>QuackQuack Error</title></head><body>';
 		foreach($url[0] as $link)
 		{
 			$result = get($link, $opts);
@@ -60,24 +57,15 @@ if($url)
 			}
 			echo html_entity_decode($true[1]) . $newline;
 		}
-		if(!$iscli)
-		{
-			echo '</body></html>';
-		}
+		$iscli || print '</body></html>';
 		unlink($cookie);
 	}
 	catch(Exception $e)
 	{
 		unlink($cookie);
-		if(!$iscli)
-		{
-			echo '<!DOCTYPE html><html><head><title>QuackQuack Error</title></head><body>';
-		}
+		$iscli || print '<!DOCTYPE html><html><head><title>QuackQuack Error</title></head><body>';
 		echo $e->getMessage();
-		if(!$iscli)
-		{
-			echo '</body></html>';
-		}
+		$iscli || print '</body></html>';
 		exit;
 	}
 	exit;
